@@ -23,7 +23,9 @@ from Base_App.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin_pannel"),
-    # patt('login/',)
+    path('login/', LoginView.as_view(), name='login'),
+    path('signup/', SignupView, name='signup'),
+    path('logout/', LogoutView, name='logout'),
     path('', HomeView, name='Home'),
     path('book_table', bookTableView, name='Book_Table'),
     path('menu', MenuView, name='Menu'),
