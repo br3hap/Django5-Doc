@@ -22,7 +22,8 @@ from django.conf.urls.static import static
 from Base_App.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name="admin_pannel"),
+    patt('login/', )
     path('', HomeView),
     path('book_table', bookTableView),
     path('menu', MenuView),
