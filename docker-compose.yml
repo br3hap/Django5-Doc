@@ -1,0 +1,44 @@
+# version: "3.9"
+
+services:
+  db:
+    image: postgres:14
+    # restart: always
+    environment:
+      POSTGRES_DB: bd_django
+      POSTGRES_USER: user_django
+      POSTGRES_PASSWORD: user_django
+    ports:
+      - "5472:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8050:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=bd_django
+      - DB_USER=user_django
+      - DB_PASSWORD=user_django
+      - DB_HOST=db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pg7
+    # restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'admin@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: 'admin'
+    ports:
+      - "68:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
