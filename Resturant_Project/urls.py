@@ -23,11 +23,12 @@ from Base_App.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin_pannel"),
-    patt('login/', )
-    path('', HomeView),
-    path('book_table', bookTableView),
-    path('menu', MenuView),
-    path('about', AboutView),
+    # patt('login/',)
+    path('', HomeView, name='Home'),
+    path('book_table', bookTableView, name='Book_Table'),
+    path('menu', MenuView, name='Menu'),
+    path('feedback/', FeedbackView, name='Feedback_Form'),
+    path('about', AboutView, name='About'),
 
 ]
 if settings.DEBUG:
