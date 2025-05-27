@@ -65,7 +65,19 @@ def LogoutView(request):
     return redirect('Home')
 
 
-
+def SignupView(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f"Welcome, {user.username}!")
+            return redirect('Home')
+        else:
+            messages.error(request, 'Error during signup. Please try again')
+    else:
+        form = UserCreationForm()
+    return render(request, 'login.html', {'form': form, 'tab': 'signup'})
     
 
 def HomeView(request):
@@ -87,7 +99,39 @@ def MenuView(request):
 
 
 def bookTableView(request):
-    pass
+    google_maps_api_key = settings.GOOGLE_MAPS_API_KEY
+
+    if request.method == 'POST':
+        name = request.POST.get('user_name')
+        phone_number = request.POST.get('phone_number')
+        email = request.POST.get('user_mail')
+        total_person = request.POST.get('total_person')
+        booking_data = request.POSt.get('booking_data')
+
+        if name != '' and len(phone_number) == 10 and email != '' and total_person != '0' and booking_data != '':
+            data = BookTable(Name=name, Phone_number=phone_number,
+                             Email=email, Total_person=total_person,
+                             Booking_date=booking_data)
+            data.save()
+
+            subject = 'Booking Confirmation'
+            message =   f"Hello {name},\n\nYour booking has been successfully received.\n" \
+                        f"Booking details:\nTotal persons: {total_person}\n" \
+                        f"Booking date: {booking_data}\n\nThank you for choosing us!"
+            
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [email]
+
+            send_mail(subject, message, from_email, recipient_list)
+
+            messages.success(request, 'Booking request submitted successfully! Please check your confirmation email.')
+
+            return render(request, 'feedback.html', {'success': 'Booking request submitted successfully! Please check your confirmation email.'})
+        
+    return render(request, 'book_table.html', {'google_maps_api_key': google_maps_api_key})
+
+
+
 
 def FeedbackView(request):
     if request.method == 'POST':

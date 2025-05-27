@@ -137,3 +137,16 @@ MEDIA_ROOT = [os.path.join(BASE_DIR / "media")]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
+EMAIL_PORT = 587  # Standard port for TLS encryption
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'breithnerap@gmail.com'  # Replace with your email address
+EMAIL_HOST_PASSWORD = '**********'  # Replace with your email password
+DEFAULT_FROM_EMAIL = 'breithnerap@gmail.com'  # The sender's email
+
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'  # Redirect after successful login
+LOGOUT_REDIRECT_URL = '/login/'  # Redirect after logout
