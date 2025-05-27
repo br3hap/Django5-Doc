@@ -12,6 +12,62 @@ from django.urls import reverse_lazy
 
 # Create your views here.
 
+def add_to_cart(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(Items, id=item_id)
+
+        cart = request.session.get('cart', {})
+
+        if item_id in cart:
+            cart[item_id]['quantity'] += 1
+        else:
+            cart[item_id] = {
+                'name': item.Item_name,
+                'price':item.Price,
+                'quantity':1
+            }
+        
+        request.session['cart'] = cart
+
+        return JsonResponse({'message': 'Item added to cart', 'cart': cart})
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    
+
+def get_cart_items(request):
+    if request.user.is_authenticated:
+        cart_items = Cart.objects.filter(user = request.user).select_related('item')
+        items = [
+            {
+                'name': cart_item.item.Item_name,
+                'quantity': cart_item.quantity,
+                'price': cart_item.item.Price,
+                'total': cart_item.quantity * cart_item.item.Price
+            }
+            for cart_item in cart_items
+        ]
+        return JsonResponse({'items': items}, safe=False)
+    return JsonResponse({'error': 'User not authenticated'}, status=401)
+
+
+class LoginView(AuthLoginView):
+    template_name = 'login.html'
+    def get_success_url(self):
+        if self.request.user.is_staff:
+            return reverse_lazy('admin:index')
+        return reverse_lazy('Home')
+    
+
+def LogoutView(request):
+    logout(request)
+    messages.success(request, 'You have been logged out successfully.')
+    return redirect('Home')
+
+
+
+    
+
 def HomeView(request):
     items = Items.objects.all()
     list = ItemList.objects.all()
