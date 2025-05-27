@@ -104,9 +104,9 @@ def bookTableView(request):
     if request.method == 'POST':
         name = request.POST.get('user_name')
         phone_number = request.POST.get('phone_number')
-        email = request.POST.get('user_mail')
+        email = request.POST.get('user_email')
         total_person = request.POST.get('total_person')
-        booking_data = request.POSt.get('booking_data')
+        booking_data = request.POST.get('booking_data')
 
         if name != '' and len(phone_number) == 10 and email != '' and total_person != '0' and booking_data != '':
             data = BookTable(Name=name, Phone_number=phone_number,

@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'Base_App',
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+LOGIN_REDIRECT_URL = '/'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -60,6 +65,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -130,7 +136,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]
 
 MEDIA_URL = 'media/'
 
-MEDIA_ROOT = [os.path.join(BASE_DIR / "media")]
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type
